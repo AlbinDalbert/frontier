@@ -6,7 +6,7 @@ import Sessions from './components/sessions/Sessions';
 const App: React.FC = () => {
   return (
     <div className="app">
-      <Sessions />
+      {/* <Sessions /> */}
       <div className="main-content">
         <header className="app-header">
           <h3>Frontier</h3>
