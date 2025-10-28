@@ -1,0 +1,19 @@
+.chat-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #242424;
+  color: white;
+  padding: 20px;
+  max-width: 1000px;
+    min-width: 700px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-right: 10px; /* for scrollbar */
+}
