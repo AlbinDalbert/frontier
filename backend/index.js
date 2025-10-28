@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
@@ -6,27 +7,50 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Backend is running!');
-});
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'api-key']
+}));
+
 
 app.post('/message', async (req, res) => {
     try {
+        const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+        const apiKey = process.env.AZURE_OPENAI_API_KEY;
+        const deployment = process.env.AZURE_OPENAI_DEPLOYMENT;
         const userMessage = req.body.message || 'Hello!';
-        const response = await fetch('https://frontier-llm-backend.openai.azure.com/openai/deployments/gpt-5-mini/chat/completions?api-version=2023-07-01', {
+
+        const url = `${endpoint}/openai/responses?api-version=2025-04-01-preview`;
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'api-key': process.env.AZURE_OPENAI_API_KEY
+                'api-key': apiKey
             },
             body: JSON.stringify({
-                messages: [{ role: 'user', content: userMessage }],
-                max_tokens: 100
+                model: deployment,
+                input: [
+                    {
+                        role: 'user',
+                        content: userMessage
+                    }
+                ]
             })
         });
 
         const data = await response.json();
-        res.json(data);
+
+        if (data.error) {
+            return res.status(400).json({ error: data.error });
+        }
+
+        const assistantMessage = data.output
+            ?.find(item => item.type === 'message')
+            ?.content?.[0]?.text || 'No response text found';
+
+        res.json({ reply: assistantMessage });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Something went wrong');
