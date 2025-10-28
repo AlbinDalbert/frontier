@@ -1,3 +1,9 @@
 # Frontier
-The out most frontend to interact with the LLMs.
+
+The front facing client side for LLMs.
+
+- React
+- Node.js
+- LLM API
+
 
