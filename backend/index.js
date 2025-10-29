@@ -11,7 +11,10 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'https://wonderful-ground-076fc6403.3.azurestaticapps.net'
+    ],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'api-key']
 }));
