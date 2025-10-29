@@ -57,4 +57,15 @@ app.post('/message', async (req, res) => {
     }
 });
 
+app.post('/message/echo', async (req, res) => {
+    const userMessage = req.body.message || 'Hello!';
+    await sleep(2000);
+    res.json({ reply: userMessage });
+});
+
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

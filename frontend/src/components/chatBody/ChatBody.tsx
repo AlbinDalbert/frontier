@@ -11,23 +11,7 @@ export interface Message {
 
 const ChatBody: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-
-  // const handleSendMessage = (text: string) => {
-  //   const newMessage: Message = {
-  //     id: Date.now().toString(),
-  //     text,
-  //     sender: 'user',
-  //   };
-  //   setMessages((prev) => [...prev, newMessage]);
-
-  //   // Simulate AI response
-  //   setTimeout(() => {
-  //     setMessages((prev) => [
-  //       ...prev,
-  //       { id: Date.now().toString(), text: `AI: ${text}`, sender: 'ai' },
-  //     ]);
-  //   }, 500);
-  // };
+  const [loading, setLoading] = useState(false);
 
   const handleSendMessage = async (text: string) => {
   const newMessage: Message = {
@@ -36,9 +20,10 @@ const ChatBody: React.FC = () => {
     sender: 'user',
   };
   setMessages((prev) => [...prev, newMessage]);
+  setLoading(true);
 
   try {
-    const response = await fetch('http://localhost:3000/message', {
+    const response = await fetch('http://localhost:3000/message/echo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,13 +44,16 @@ const ChatBody: React.FC = () => {
       ...prev,
       { id: Date.now().toString(), text: 'Error contacting AI', sender: 'ai' },
     ]);
+  } finally {
+    setLoading(false);
   }
+
 };
 
   return (
     <div className="chat-body">
-      <Messages messages={messages} />
-      <InputBox onSend={handleSendMessage} />
+      <Messages messages={messages} isLoading={loading} />
+      <InputBox onSend={handleSendMessage} isLoading={loading} />
     </div>
   );
 };
