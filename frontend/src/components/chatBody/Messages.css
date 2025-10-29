@@ -5,7 +5,6 @@
   width: fit-content;
   max-width: 80%;
   word-wrap: break-word;
-  /* white-space: pre-wrap; */
 }
 
 pre {
@@ -33,15 +32,13 @@ pre {
 .loading-spinner {
   width: 6px;
   height: 6px;
-  /* background: #333; */
-  background: #FDE910;
+  background: radial-gradient(circle at center, #FDE910 60%, #FFD700 100%);
   align-self: flex-start;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  /* border-top-color: white; */
   border-radius: 17px 0px 17px 0px;
-  /* border-radius: 50%; */
   animation: spin 0.8s linear infinite;
   margin: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 
 @keyframes spin {
