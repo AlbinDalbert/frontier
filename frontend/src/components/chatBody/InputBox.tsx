@@ -46,7 +46,6 @@ const InputBox: React.FC<InputBoxProps> = ({ onSend, isLoading }) => {
         }}
         placeholder="Type your message..."
         rows={1}
-        // disabled={isLoading}
       />
       <button onClick={handleSend} disabled={isLoading}>Send</button>
     </div>

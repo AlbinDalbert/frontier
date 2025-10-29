@@ -23,12 +23,16 @@ const ChatBody: React.FC = () => {
   setLoading(true);
 
   try {
-    const response = await fetch('http://localhost:3000/message/echo', {
+    const context = contextToJson(messages);
+    const response = await fetch('http://localhost:3000/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({ 
+        context: context,
+        message: text 
+      }),
     });
 
     const data = await response.json();
@@ -57,5 +61,13 @@ const ChatBody: React.FC = () => {
     </div>
   );
 };
+
+
+function contextToJson(messages: Message[]) {
+  return messages.map((msg) => ({
+    role: msg.sender === 'ai' ? 'assistant' : 'user',
+    content: msg.text
+  }));
+}
 
 export default ChatBody;

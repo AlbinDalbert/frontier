@@ -19,6 +19,7 @@ app.post('/message', async (req, res) => {
         const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
         const apiKey = process.env.AZURE_OPENAI_API_KEY;
         const deployment = process.env.AZURE_OPENAI_DEPLOYMENT;
+        const contextMessages = req.body.context;
         const userMessage = req.body.message || 'Hello!';
 
         const url = `${endpoint}/openai/responses?api-version=2025-04-01-preview`;
@@ -32,6 +33,7 @@ app.post('/message', async (req, res) => {
             body: JSON.stringify({
                 model: deployment,
                 input: [
+                    ...contextMessages,
                     {
                         role: 'user',
                         content: userMessage
