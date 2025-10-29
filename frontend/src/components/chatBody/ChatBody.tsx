@@ -24,7 +24,7 @@ const ChatBody: React.FC = () => {
 
   try {
     const context = contextToJson(messages);
-    const response = await fetch('http://localhost:3000/message', {
+    const response = await fetch('https://frontier-llm-api-f7d0bkgugpegevg9.swedencentral-01.azurewebsites.net/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

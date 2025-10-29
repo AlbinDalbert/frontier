@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+console.log('Endpoint:', process.env.AZURE_OPENAI_ENDPOINT);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
