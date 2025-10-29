@@ -26,7 +26,7 @@ const Messages: React.FC<MessagesProps> = ({ messages, isLoading }) => {
         </div>
       ))}
       {isLoading && (
-        <div className="message ai loading-spinner" />
+        <div className="message loading-spinner" />
       )}
       <div ref={endRef} />
     </div>

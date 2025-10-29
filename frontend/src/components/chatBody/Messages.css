@@ -20,20 +20,26 @@ pre {
   color: white;
   align-self: flex-end;
   margin-left: auto;
+  border-radius: 12px 12px 2px 12px;
 }
 
 .message.ai {
   background: #333;
   color: white;
   align-self: flex-start;
+  border-radius: 12px 12px 12px 2px;
 }
 
 .loading-spinner {
   width: 6px;
   height: 6px;
+  /* background: #333; */
+  background: #FDE910;
+  align-self: flex-start;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
+  /* border-top-color: white; */
+  border-radius: 17px 0px 17px 0px;
+  /* border-radius: 50%; */
   animation: spin 0.8s linear infinite;
   margin: 10px;
 }
