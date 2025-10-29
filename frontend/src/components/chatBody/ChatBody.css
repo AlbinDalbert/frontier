@@ -16,8 +16,21 @@
   overflow-y: auto;
   margin-bottom: 20px;
   padding-right: 10px;
-  
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
+/*   
+  scrollbar-width: none;
+  -ms-overflow-style: none; */
 
+}
+
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
 }

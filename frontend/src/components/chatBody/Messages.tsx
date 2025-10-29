@@ -22,7 +22,7 @@ const Messages: React.FC<MessagesProps> = ({ messages, isLoading }) => {
     <div className="messages">
       {messages.map((msg) => (
         <div key={msg.id} className={`message ${msg.sender}`}>
-          {msg.text}
+          <pre>{msg.text}</pre>
         </div>
       ))}
       {isLoading && (

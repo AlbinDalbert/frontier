@@ -14,45 +14,46 @@ const ChatBody: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSendMessage = async (text: string) => {
-  const newMessage: Message = {
-    id: Date.now().toString(),
-    text,
-    sender: 'user',
+    const cleanedText = text.trim();
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      text: cleanedText,
+      sender: 'user',
+    };
+    setMessages((prev) => [...prev, newMessage]);
+    setLoading(true);
+
+    try {
+      const context = contextToJson(messages);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/message`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          context: context,
+          message: cleanedText 
+        }),
+      });
+
+      const data = await response.json();
+      const aiReply = data.reply || 'No response from AI';
+
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now().toString(), text: aiReply, sender: 'ai' },
+      ]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now().toString(), text: 'Error contacting AI', sender: 'ai' },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+
   };
-  setMessages((prev) => [...prev, newMessage]);
-  setLoading(true);
-
-  try {
-    const context = contextToJson(messages);
-    const response = await fetch('https://frontier-llm-api-f7d0bkgugpegevg9.swedencentral-01.azurewebsites.net/message', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        context: context,
-        message: text 
-      }),
-    });
-
-    const data = await response.json();
-    const aiReply = data.reply || 'No response from AI';
-
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now().toString(), text: aiReply, sender: 'ai' },
-    ]);
-  } catch (error) {
-    console.error('Error sending message:', error);
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now().toString(), text: 'Error contacting AI', sender: 'ai' },
-    ]);
-  } finally {
-    setLoading(false);
-  }
-
-};
 
   return (
     <div className="chat-body">
