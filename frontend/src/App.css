@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap');
+
 .app {
   display: flex;
   height: 100vh;
+  font-family: 'Exo 2', sans-serif;
 }
 
 .main-content {
@@ -12,4 +15,5 @@
 
 .app-header {
   text-align: center;
+  margin-bottom: 0px;
 }

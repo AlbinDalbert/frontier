@@ -1,16 +1,15 @@
 .input-box {
   display: flex;
   gap: 10px;
-  background: #1a1a1a;
+  background: var(--color-surface);
   padding: 10px;
   border-radius: 5px;
 }
 
 .input-box > .input-field {
   flex: 1;
-  background: #333;
-  border: 1px solid #444;
-  color: white;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
   padding: 10px;
   border-radius: 5px;
   max-height: 140px;
@@ -19,8 +18,8 @@
 }
 
 .input-box button {
-  background: #007bff;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -28,7 +27,7 @@
 }
 
 .input-box button:hover {
-  background: #0056b3;
+  background: var(--color-primary-hover);
 }
 
 .input-box > textarea::-webkit-scrollbar {
@@ -48,5 +47,5 @@
 .input-box button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #007bff;
+  background-color: var(--color-primary);
 }

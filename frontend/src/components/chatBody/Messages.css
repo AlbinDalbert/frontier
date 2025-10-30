@@ -3,7 +3,7 @@
   border-radius: 5px;
   margin-bottom: 10px;
   width: fit-content;
-  max-width: 80%;
+  max-width: var(--max-bubble-width);
   word-wrap: break-word;
 }
 
@@ -15,18 +15,18 @@ pre {
 }
 
 .message.user {
-  background: #007bff;
+  background: var(--color-primary);
   color: white;
   align-self: flex-end;
   margin-left: auto;
-  border-radius: 12px 12px 2px 12px;
+  border-radius: var(--bubble-radius) var(--bubble-radius) var(--bubble-radius-min) var(--bubble-radius);
 }
 
 .message.ai {
-  background: #333;
-  color: white;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
   align-self: flex-start;
-  border-radius: 12px 12px 12px 2px;
+  border-radius: var(--bubble-radius) var(--bubble-radius) var(--bubble-radius) var(--bubble-radius-min);
 }
 
 .loading-spinner {

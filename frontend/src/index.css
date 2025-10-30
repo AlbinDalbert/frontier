@@ -11,6 +11,34 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --font-ui: 'Exo 2', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
+  --fs-base: 16px;
+  --lh-body: 1.6;
+  --bubble-radius: 16px;
+  --bubble-radius-min: 2px;
+  --max-bubble-width: 68ch;
+  --max-chatbody-width: 76ch;
+
+  
+  /* Background layers */
+  --color-bg: #242424;
+  --color-surface: #1a1a1a;
+  --color-surface-hover: #222;
+
+  --color-surface-alt: #333;
+
+  /* Text roles */
+  --color-text: #ffffff;
+  /* --color-text-muted: #333333; */
+
+  /* Action roles */
+  --color-primary: #007bff; /* main button */
+  --color-primary-hover: #0056b3;
+  --color-accent: #ffd700; /* highlight or special button */
+  --color-danger: #ff4d4d; /* destructive actions */
+
 }
 
 body {

@@ -1,20 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap');
+
 .chat-body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: #242424;
-  color: white;
+  background: var(--color-bg);
+  color: var(--color-text);
   padding: 20px;
-  max-width: 1000px;
-    min-width: 700px;
+  max-width: var(--max-chatbody-width);
+  width: 100%;
   margin: 0 auto;
+  padding-top: 0px;
   overflow: hidden;
+  font-family: var(--font-ui);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);  
 }
 
 .messages {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   padding-right: 10px;
 }
 
