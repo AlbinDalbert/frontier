@@ -8,7 +8,7 @@
 
 .input-box > .input-field {
   flex: 1;
-  background: var(--color-surface-alt);
+  background: var(--color-surface);
   color: var(--color-text);
   padding: 10px;
   border-radius: 5px;
@@ -19,7 +19,7 @@
 
 .input-box button {
   background: var(--color-primary);
-  color: var(--color-text);
+  color: var(--color-text-alt);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
