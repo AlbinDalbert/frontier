@@ -13,10 +13,13 @@ That chat history and new message is then sent to a Node.js backend which handle
 The chat body is scrollable without the write message field disapears, scrolls to the bottom automatically when messages comes. 
 Sending messge is disabled while waiting for a reply from the backend.
 
+<img width="770" height="896" alt="image" src="https://github.com/user-attachments/assets/a0f00563-0563-4f73-8992-01fc81424230" />
+
 ## Potential Improvments
 - copy message text button
 - make previous messages editable
 - retry/regenerate response
 - add sessions module
 - add auth
+
 
