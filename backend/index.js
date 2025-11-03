@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'https://wonderful-ground-076fc6403.3.azurestaticapps.net'
+        process.env.CORS_ALLOWED_PUBLIC
     ],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'api-key']
@@ -28,6 +28,8 @@ app.post('/message', async (req, res) => {
         const contextMessages = req.body.context;
         const userMessage = req.body.message || 'Hello!';
 
+        const search_context = await get_search_context(userMessage);
+        console.log('Search Context:', search_context);
         const url = `${endpoint}/openai/responses?api-version=2025-04-01-preview`;
 
         const response = await fetch(url, {
@@ -39,7 +41,15 @@ app.post('/message', async (req, res) => {
             body: JSON.stringify({
                 model: deployment,
                 input: [
+                    {
+                        role: 'system',
+                        content: 'You are a helpful assistant. If applicable, start with a very short answer for people in a hurry.'
+                    },
                     ...contextMessages,
+                    {
+                        role: 'system',
+                        content: `Use the following context to answer the question:\n${search_context}`
+                    },
                     {
                         role: 'user',
                         content: userMessage
@@ -71,6 +81,32 @@ app.post('/message/echo', async (req, res) => {
     res.json({ reply: userMessage });
 });
 
+async function get_search_context(message) {
+    const url = `${process.env.AZURE_SEARCH_ENDPOINT}/indexes/${process.env.AZURE_SEARCH_INDEX}/docs/search?api-version=2024-07-01`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'api-key': process.env.AZURE_SEARCH_KEY
+        },
+        body: JSON.stringify({
+            search: message,
+            top: parseInt(process.env.AZURE_SEARCH_NUMBER_OF_CHUNKS) || 40,
+        })
+    });
+    
+    // console.log(await response.json());
+    const json = await response.json();
+    const data = json.value || [];
+
+    
+    const contextText = data
+        .map(doc => `${doc.title}\n${doc.content}`)
+        .join("\n\n");
+
+    return contextText;
+}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

@@ -26,3 +26,4 @@ dist-ssr
 .env
 *.pdf
 out.md
+index_schema.json
