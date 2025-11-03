@@ -29,7 +29,7 @@ const InputBox: React.FC<InputBoxProps> = ({ onSend, isLoading }) => {
 
   return (
     <div className="input-box">
-      <textarea className="input-field"
+      <textarea autoFocus className="input-field"
         ref={textareaRef}
         value={input}
         onChange={(e) => {

@@ -27,39 +27,46 @@
 
   /* **Default** */
   /* Background layers */
-  /* --color-bg: #242424;
+  --color-bg: #242424;
   --color-surface: #1a1a1a;
   --color-surface-hover: #222;
-  --color-surface-alt: #333; */
+  --color-surface-alt: #333;
 
   /* Text roles */
-  /* --color-text: #ffffff; */
+  --color-text: #ffffff;
+  --color-text-alt: #1a1a1a;
 
   /* Action roles */
-  /* --color-primary: #007bff;
+  --color-primary: #007bff;
   --color-primary-hover: #0056b3;
   --color-accent: #ffd700;
-  --color-danger: #ff4d4d; */
+  --color-danger: #ff4d4d;
 
 
   /* **Aperture** */
   /* Background layers */
-  --color-bg: #270d06;
+  /* --color-bg: #270d06;
   --color-surface: #2d1200;
   --color-surface-hover: #3a1a0a;
-  --color-surface-alt: #4d2615;
+  --color-surface-alt: #4d2615; */
 
   /* Text roles */
-  --color-text: #ffcc66;
-  --color-text-alt: #2d1200;
+  /* --color-text: #ffcc66;
+  --color-text-alt: #2d1200; */
 
   /* Action roles */
-  --color-primary: #ffcc00;
+  /* --color-primary: #ffcc00;
   --color-primary-hover: #cc9900;
   --color-accent: #6666bb;
-  --color-danger: #dd6600;
+  --color-danger: #dd6600; */
 
 }
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg); /* or any contrasting text color */
+}
+
 
 body {
   min-height: 100%;
