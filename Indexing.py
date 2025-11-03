@@ -1,9 +1,19 @@
+
+from azure.search.documents import SearchClient
+from azure.search.documents.indexes import SearchIndexClient
+from azure.search.documents.indexes.models import SearchIndex
+from azure.core.credentials import AzureKeyCredential
+import uuid
+from dotenv import load_dotenv
+import os
 import sys
 import pdfplumber
 import re
 import uuid
+import argparse
 from collections import defaultdict
 
+load_dotenv()
 
 headings = {
     "Chapter": {
@@ -34,7 +44,7 @@ def extract_pdf_content_to_chunks(text):
     chunks = []
     if root.content:
         new_chunk = {
-            "id": 0,
+            "id": "0",
             "title": "root",
             "content": " ".join(root.content),
             "heading_path": "ROOT",
@@ -46,6 +56,7 @@ def extract_pdf_content_to_chunks(text):
 
     # print_chunks(chunks)
     # print_tree(root)
+    print(f"Total chunks created: {len(chunks)}")
     
     return chunks
 
@@ -208,11 +219,31 @@ def print_chunks(chunks):
         print(f"Heading Path: {chunk['heading_path']}")
         print(f"Included titles: {chunk['included_titles']}")
 
+## upload to azure search ##
+def upload_chunks(chunks):
+    endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
+    index_name = os.getenv("AZURE_SEARCH_INDEX")
+    api_key = os.getenv("AZURE_SEARCH_KEY")
+    
+    search_client = SearchClient(endpoint=endpoint,
+                                index_name=index_name,
+                                credential=AzureKeyCredential(api_key))
+    
+    results = search_client.upload_documents(documents=chunks)
+    print(f"Uploaded {len(results)} documents.\n-----")
+
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Process and optionally upload PDF chunks.")
+    parser.add_argument("pdf_file", help="Path to the PDF file")
+    parser.add_argument("--upload", action="store_true", help="Upload chunks after processing")
+
+    args = parser.parse_args()
     chunks = []
-    if len(sys.argv) != 2:
-        print("Usage: python myPy.py <pdf_file>")
-    else:
-        text = extract_text(sys.argv[1])
-        chunks = extract_pdf_content_to_chunks(text)
+
+    text = extract_text(args.pdf_file)
+    chunks = extract_pdf_content_to_chunks(text)
+
+    if args.upload:
+        upload_chunks(chunks)
