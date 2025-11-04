@@ -45,6 +45,10 @@ app.post('/message', async (req, res) => {
                         role: 'system',
                         content: 'You are a helpful assistant. If applicable, start with a very short answer for people in a hurry.'
                     },
+                    {
+                        role: 'system',
+                        content: ' When calculating available holiday days, you must sum the entitlement from ALL completed holiday credit years since the start of employment. Do not confuse the total available days with the rules for scheduling (e.g., the 24-day summer holiday portion). The final answer must be the total accumulated sum.'
+                    },
                     ...contextMessages,
                     {
                         role: 'system',
