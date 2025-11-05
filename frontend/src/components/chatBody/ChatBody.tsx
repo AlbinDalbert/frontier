@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ChatBody.css';
 import Messages from './Messages';
 import InputBox from './InputBox';
+import { useAzureStream } from '../../hooks/useAzureStream';
 
 export interface Message {
   id: string;
@@ -11,54 +12,54 @@ export interface Message {
 
 const ChatBody: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { startStreaming, text: streamedText, done } = useAzureStream();
+  const [isStreaming, setIsStreaming] = useState(false);
 
-  const handleSendMessage = async (text: string) => {
-    const cleanedText = text.trim();
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: cleanedText,
+  const handleSendMessage = (messageText: string) => {
+    if (!messageText.trim() || isStreaming) return;
+
+    const newUserMessage: Message = {
+      id: `user-${Date.now()}`,
+      text: messageText,
       sender: 'user',
     };
-    setMessages((prev) => [...prev, newMessage]);
-    setLoading(true);
 
-    try {
-      const context = contextToJson(messages);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/message`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          context: context,
-          message: cleanedText 
-        }),
-      });
+    const currentContext = contextToJson(messages);
+    setMessages(prev => [...prev, newUserMessage]);
+    setIsStreaming(true);
 
-      const data = await response.json();
-      const aiReply = data.reply || 'No response from AI';
-
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), text: aiReply, sender: 'ai' },
-      ]);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), text: 'Error contacting AI', sender: 'ai' },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-
+    startStreaming({
+      url: `http://localhost:3000/message`,
+      payload: {
+        message: messageText,
+        context: currentContext,
+      },
+      requestId: `req-${Date.now()}`,
+    });
   };
+
+  useEffect(() => {
+    if (done) {
+      setIsStreaming(false);
+      if (streamedText) {
+        const newAiMessage: Message = {
+          id: `ai-${Date.now()}`,
+          text: streamedText,
+          sender: 'ai',
+        };
+        setMessages((prev) => [...prev, newAiMessage]);
+      }
+    }
+  }, [done, streamedText]);
 
   return (
     <div className="chat-body">
-      <Messages messages={messages} isLoading={loading} />
-      <InputBox onSend={handleSendMessage} isLoading={loading} />
+      <Messages
+        messages={messages}
+        isLoading={isStreaming && !streamedText}
+        streamedText={isStreaming ? streamedText : ''}
+      />
+      <InputBox onSend={handleSendMessage} isLoading={isStreaming} />
     </div>
   );
 };

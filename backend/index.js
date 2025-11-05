@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -29,17 +31,21 @@ app.post('/message', async (req, res) => {
         const userMessage = req.body.message || 'Hello!';
 
         const search_context = await get_search_context(userMessage);
-        console.log('Search Context:', search_context);
+        // console.log('Search Context:', search_context);
+        console.log('User Message:', userMessage);
         const url = `${endpoint}/openai/responses?api-version=2025-04-01-preview`;
 
-        const response = await fetch(url, {
+        const response = await axios({
+            url: url,
             method: 'POST',
+            responseType: 'stream',
             headers: {
                 'Content-Type': 'application/json',
                 'api-key': apiKey
             },
-            body: JSON.stringify({
+            data: {
                 model: deployment,
+                stream: true,
                 input: [
                     {
                         role: 'system',
@@ -59,20 +65,28 @@ app.post('/message', async (req, res) => {
                         content: userMessage
                     }
                 ]
-            })
+            },
         });
 
-        const data = await response.json();
+        
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
 
-        if (data.error) {
-            return res.status(400).json({ error: data.error });
-        }
 
-        const assistantMessage = data.output
-            ?.find(item => item.type === 'message')
-            ?.content?.[0]?.text || 'No response text found';
+        response.data.on('data', (chunk) => {
+            res.write(chunk);
+        });
+        
+        response.data.on('end', () => {
+            res.write('data: [DONE]\n\n');
+            res.end();
+        });
 
-        res.json({ reply: assistantMessage });
+        response.data.on('error', (err) => {
+            console.error('Stream error:', err);
+            res.status(500).end();
+        });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Something went wrong');
