@@ -4,15 +4,22 @@ import Messages from "./Messages";
 import InputBox from "./InputBox";
 import { useAzureStream } from "../../hooks/useAzureStream";
 
+type Role = "assistant" | "user" | "system";
+
 export interface Message {
     id: string;
     text: string;
-    sender: "user" | "ai";
+    sender: Role;
 }
 
 const ChatBody: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
-    const { startStreaming, text: streamedText, done } = useAzureStream();
+    const {
+        startStreaming,
+        text: streamedText,
+        done,
+        error,
+    } = useAzureStream();
     const [isStreaming, setIsStreaming] = useState(false);
 
     const handleSendMessage = (messageText: string) => {
@@ -44,10 +51,21 @@ const ChatBody: React.FC = () => {
                 const newAiMessage: Message = {
                     id: `ai-${Date.now()}`,
                     text: streamedText,
-                    sender: "ai",
+                    sender: "assistant",
                 };
                 setMessages((prev) => [...prev, newAiMessage]);
             }
+        }
+        if (error) {
+            setIsStreaming(false);
+            console.error("Streaming error:", error);
+            const errorMessage: Message = {
+                id: `system-${Date.now()}`,
+                text: error,
+                sender: "system",
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+            console.log("all messages: ", messages);
         }
     }, [done, streamedText]);
 
@@ -65,9 +83,20 @@ const ChatBody: React.FC = () => {
 
 function contextToJson(messages: Message[]) {
     return messages.map((msg) => ({
-        role: msg.sender === "ai" ? "assistant" : "user",
+        role: msg.sender,
         content: msg.text,
     }));
+}
+
+function mapSenderToRole(sender: string): Role {
+    switch (sender) {
+        case "assistant":
+            return "assistant";
+        case "system":
+            return "system";
+        default:
+            return "user";
+    }
 }
 
 export default ChatBody;

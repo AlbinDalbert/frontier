@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
 
+/* @import OriolaThemeProvider from "@oriola-origo/core/lib/Theme/OriolaThemeProvider";
+@import Typography from "@oriola-origo/core/lib/Typography"; */
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   min-height: 100%;
   color-scheme: light dark;
-  color: var(--color-text);
+  color: var(--color-secondary-G);
   background-color: var(--color-bg);
 
   font-synthesis: none;
@@ -27,22 +30,63 @@
 
   /* **Default** */
   /* Background layers */
-  --color-bg: #242424;
+  /* --color-bg: #242424;
   --color-surface: #1a1a1a;
   --color-surface-hover: #222;
-  --color-surface-alt: #333;
+  --color-surface-alt: #333; */
 
   /* Text roles */
-  --color-text: #ffffff;
-  --color-text-alt: #1a1a1a;
+  /* --color-text: #ffffff;
+  --color-text-alt: #1a1a1a; */
 
   /* Action roles */
-  --color-primary: #007bff;
+  /* --color-primary: #007bff;
   --color-primary-hover: #0056b3;
   --color-accent: #ffd700;
+  --color-danger: #ff4d4d; */
+
+
+    /* **Oriola** */
+    
+    /* Oriola official colors */
+  --color-primary: #ffa000;
+  --color-primary-tint-75: #FFBF55;
+  --color-primary-tint-55: #FFD48D;
+  --color-primary-tint-25: #FFE9C6;
+
+  --color-primary-hover: #cc8400;
+  
+  --color-secondary: #2B3E5B;
+  --color-secondary-tint-70: #5A687F;
+  --color-secondary-tint-45: #A0A9B6;
+  --color-secondary-tint-20: #E7E9EC;
+  
+  --color-secondary-DG: #757070;
+  --color-secondary-DG-tint-60: #938F8F;
+  --color-secondary-DG-tint-30: #C1BFBF;
+  --color-secondary-DG-tint-15: #E0DFDF;
+  --color-secondary-DG-text: #454242;
+
+  --color-secondary-G: #A29791;
+  --color-secondary-G-tint-55: #C1B9B5;
+  --color-secondary-G-tint-30: #E0DCDA;
+  --color-secondary-G-tint-10: #F4F3F2;
+  
+  
+  /* Background layers */
+  --color-bg: #ffffff;
+  --color-surface: var(--color-secondary);
+  --color-surface-hover: color-mix(in srgb, var(--color-primary), transparent 95%);
+  --color-surface-alt: transparent;
+  
+  --color-accent: #007BFF;
   --color-danger: #ff4d4d;
 
-
+  /* Text roles */
+  --color-header-text: #ffa000;
+  --color-text: var(--color-secondary-DG-text);
+  --color-text-alt: #ffffff;
+  
   /* **Aperture** */
   /* Background layers */
   /* --color-bg: #270d06;
@@ -64,7 +108,8 @@
 
 ::selection {
   background-color: var(--color-accent);
-  color: var(--color-bg); /* or any contrasting text color */
+  color: #ffffff;
+  font-weight: bold;
 }
 
 
@@ -81,6 +126,7 @@ h1, h2, h3, button {
 textarea {
   resize: none;
   border: transparent;
-  outline: var(--color-primary);
+  outline: none;
+  /* outline: var(--color-primary); */
 }
 

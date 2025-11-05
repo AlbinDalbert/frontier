@@ -3,6 +3,7 @@
   font-weight: 500;
   border-radius: 5px;
   margin-bottom: 10px;
+  color: var(--color-text);
   width: fit-content;
   max-width: var(--max-bubble-width);
   word-wrap: break-word;
@@ -16,16 +17,29 @@ pre {
 }
 
 .message.user {
-  background: var(--color-primary);
-  color: var(--color-text-alt);
+  background: var(--color-primary-tint-55);
   align-self: flex-end;
   margin-left: auto;
   border-radius: var(--bubble-radius) var(--bubble-radius) var(--bubble-radius-min) var(--bubble-radius);
 }
 
+.message.system {
+  padding: 2px;
+  width: 100%;
+  max-width: 100%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger), transparent 70%);
+  align-self: stretch;
+  text-align: center;
+  font-size: smaller;
+  margin-left: auto;
+  border-radius: var(--bubble-radius-min) var(--bubble-radius-min) var(--bubble-radius-min) var(--bubble-radius-min);
+}
+
 .message.ai {
   background: var(--color-surface-alt);
-  color: var(--color-text);
   align-self: flex-start;
   border-radius: var(--bubble-radius) var(--bubble-radius) var(--bubble-radius) var(--bubble-radius-min);
 }
@@ -35,11 +49,11 @@ pre {
   height: 6px;
   background: radial-gradient(circle at center, #FDE910 60%, #FFD700 100%);
   align-self: flex-start;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.4);
   border-radius: 17px 0px 17px 0px;
-  animation: spin-sequence 3.2s cubic-bezier(.4,0,.2,1) infinite;
+  animation: spin-sequence-long 6.2s cubic-bezier(.4,0,.2,1) infinite;
   margin: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  box-shadow: 0 0 7px rgba(0,0,0,0.4);
 }
 
 /* .loading-spinner {
@@ -62,5 +76,12 @@ pre {
 @keyframes spin-sequence {
   0%   { transform: rotate(-70deg); }
   50%  { transform: rotate(420deg); }
-  100% { transform: rotate(1370deg); }
+  100% { transform: rotate(1730deg); }
+}
+
+@keyframes spin-sequence-long {
+  0%   { transform: rotate(-70deg); }
+  25%  { transform: rotate(420deg); }
+  60% { transform: rotate(1910deg); }
+  100%  { transform: rotate(1550deg); }
 }

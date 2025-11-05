@@ -14,13 +14,16 @@ export function useAzureStream(): {
     startStreaming: (options: UseAzureStreamOptions) => void;
     text: string;
     done: boolean;
+    error: string | null;
 } {
     const [text, setText] = useState("");
     const [done, setDone] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const startStreaming = (options: UseAzureStreamOptions) => {
         setText("");
         setDone(false);
+        setError(null);
 
         const fetchStream = async () => {
             try {
@@ -85,12 +88,14 @@ export function useAzureStream(): {
                 }
             } catch (error) {
                 console.error("Streaming request failed:", error);
-                setText("Error connecting to AI");
+                setError(
+                    "Error: We lost the lemon :( Please try make lemonade again with a new message or start a new session."
+                );
                 setDone(true);
                 return;
             }
         };
         fetchStream();
     };
-    return { startStreaming, text, done };
+    return { startStreaming, text, done, error };
 }

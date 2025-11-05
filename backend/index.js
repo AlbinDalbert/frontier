@@ -51,11 +51,15 @@ app.post('/message', async (req, res) => {
                     },
                     {
                         role: 'system',
+                        content: 'If you see a message system "Error: We lost the lemon" in the history, it means that the connection was interupted unexpectedly while the message was being sent to the client. Ignore it unless the user asks about it.'
+                    },
+                    {
+                        role: 'system',
                         content: ' When calculating available holiday days, you must sum the entitlement from ALL completed holiday credit years since the start of employment. Do not confuse the total available days with the rules for scheduling (e.g., the 24-day summer holiday portion). The final answer must be the total accumulated sum.'
                     },
                     {
                         role: 'system',
-                        content: `Use the following internal context to answer the users question:\n${search_context}`
+                        content: `Use the following internal context to answer the users question. If you get an error and you suspect it is important info to answer the users question, tell them you encountered a problem. context: \n${search_context}`
                     },
                     ...contextMessages,
                     {
@@ -96,28 +100,34 @@ app.post('/message/echo', async (req, res) => {
 });
 
 async function get_search_context(message) {
-    const url = `${process.env.AZURE_SEARCH_ENDPOINT}/indexes/${process.env.AZURE_SEARCH_INDEX}/docs/search?api-version=2024-07-01`;
+    try {
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'api-key': process.env.AZURE_SEARCH_KEY
-        },
-        body: JSON.stringify({
-            search: message,
-            top: parseInt(process.env.AZURE_SEARCH_NUMBER_OF_CHUNKS) || 40,
-        })
-    });
+        const url = `${process.env.AZURE_SEARCH_ENDPOINT}/indexes/${process.env.AZURE_SEARCH_INDEX}/docs/search?api-version=2024-07-01`;
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': process.env.AZURE_SEARCH_KEY
+            },
+            body: JSON.stringify({
+                search: message,
+                top: parseInt(process.env.AZURE_SEARCH_NUMBER_OF_CHUNKS) || 40,
+            })
+        });
     
-    const json = await response.json();
-    const data = json.value || [];
-    
-    const contextText = data
-        .map(doc => `${doc.title}\n${doc.content}`)
-        .join("\n\n");
-
-    return contextText;
+        const json = await response.json();
+        const data = json.value || [];
+        
+        const contextText = data
+            .map(doc => `${doc.title}\n${doc.content}`)
+            .join("\n\n");
+        
+        return contextText;
+    } catch {
+        console.log("failed to fetch search context");
+        return "ERROR: failed to get search context";
+    }
 }
 
 function sleep(ms) {
