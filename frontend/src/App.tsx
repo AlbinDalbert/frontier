@@ -9,7 +9,7 @@ const App: React.FC = () => {
       {/* <Sessions /> */}
       <div className="main-content">
         <header className="app-header">
-          <h3>Frontier</h3>
+          <h3>MakeLemonade</h3>
         </header>
         <ChatBody />
       </div>

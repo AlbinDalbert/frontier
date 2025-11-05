@@ -31,8 +31,6 @@ app.post('/message', async (req, res) => {
         const userMessage = req.body.message || 'Hello!';
 
         const search_context = await get_search_context(userMessage);
-        // console.log('Search Context:', search_context);
-        console.log('User Message:', userMessage);
         const url = `${endpoint}/openai/responses?api-version=2025-04-01-preview`;
 
         const response = await axios({
@@ -49,17 +47,17 @@ app.post('/message', async (req, res) => {
                 input: [
                     {
                         role: 'system',
-                        content: 'You are a helpful assistant. If applicable, start with a very short answer for people in a hurry.'
+                        content: 'You are a helpful assistant. If the answer to the users question has a short, one-line answer, provide that in addition to a more detailed explanation. If the question isn\'t quick and easy to answer, provide don\'t provide a quick answer.'
                     },
                     {
                         role: 'system',
                         content: ' When calculating available holiday days, you must sum the entitlement from ALL completed holiday credit years since the start of employment. Do not confuse the total available days with the rules for scheduling (e.g., the 24-day summer holiday portion). The final answer must be the total accumulated sum.'
                     },
-                    ...contextMessages,
                     {
                         role: 'system',
-                        content: `Use the following context to answer the question:\n${search_context}`
+                        content: `Use the following internal context to answer the users question:\n${search_context}`
                     },
+                    ...contextMessages,
                     {
                         role: 'user',
                         content: userMessage
@@ -67,12 +65,10 @@ app.post('/message', async (req, res) => {
                 ]
             },
         });
-
         
         res.setHeader('Content-Type', 'text/event-stream');
         res.setHeader('Cache-Control', 'no-cache');
         res.setHeader('Connection', 'keep-alive');
-
 
         response.data.on('data', (chunk) => {
             res.write(chunk);
@@ -114,10 +110,8 @@ async function get_search_context(message) {
         })
     });
     
-    // console.log(await response.json());
     const json = await response.json();
     const data = json.value || [];
-
     
     const contextText = data
         .map(doc => `${doc.title}\n${doc.content}`)

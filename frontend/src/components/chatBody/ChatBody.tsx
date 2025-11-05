@@ -29,12 +29,11 @@ const ChatBody: React.FC = () => {
     setIsStreaming(true);
 
     startStreaming({
-      url: `http://localhost:3000/message`,
+      url: `${import.meta.env.VITE_API_URL}/message`,
       payload: {
         message: messageText,
         context: currentContext,
-      },
-      requestId: `req-${Date.now()}`,
+      }
     });
   };
 
