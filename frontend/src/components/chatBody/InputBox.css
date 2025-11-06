@@ -3,11 +3,9 @@
   gap: 10px;
   background: var(--color-bg);
   padding: 10px;
-  border-radius: 4ch;
-  /* border-style: solid; */
-  /* border-width: 1px; */
+  border-radius: 2ch;
   border-color: transparent;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .input-box > .input-field {
@@ -16,19 +14,27 @@
   color: var(--color-text);
   padding: 10px;
   border-radius: 5px;
+  /* min-height: 36px; */
+   min-height: 24px;
   max-height: 140px;
-  resize: 'none';
   overflow: 'hidden';
+  box-sizing: border-box;
 }
 
 .input-box button {
   background: var(--color-primary);
   color: var(--color-text);
   border: none;
-  padding: 10px 20px;
-  /* border-radius: 5px; */
-  border-radius: 4ch;
+  align-self: flex-end;
+  width: 8ch;
+  /* height: 56px; */
+  height: 44px;
+  border-radius: 2ch;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
 
 .input-box button:hover {

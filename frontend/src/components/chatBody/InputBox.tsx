@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 import "./InputBox.css";
+import sendIcon from "../../assets/Untitled.png";
 
 interface InputBoxProps {
     onSend: (text: string) => void;
@@ -24,8 +25,11 @@ const InputBox: React.FC<InputBoxProps> = ({ onSend, isLoading }) => {
         if (textarea) {
             textarea.style.height = "auto";
             textarea.style.height = `${textarea.scrollHeight}px`;
+            textarea.placeholder = isLoading
+                ? "Waiting for response..."
+                : "Ask me anything...";
         }
-    }, [input]);
+    }, [input, isLoading]);
 
     return (
         <div className="input-box">
@@ -50,7 +54,12 @@ const InputBox: React.FC<InputBoxProps> = ({ onSend, isLoading }) => {
                 rows={1}
             />
             <button onClick={handleSend} disabled={isLoading}>
-                Send
+                {/* Fix getting a better image for the send icon */}
+                <img
+                    src={sendIcon}
+                    alt="Send"
+                    style={{ width: "20px", height: "20px" }}
+                />
             </button>
         </div>
     );

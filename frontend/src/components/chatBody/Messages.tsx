@@ -20,6 +20,7 @@ const Messages: React.FC<MessagesProps> = ({
         endRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isLoading]);
 
+    // add react-markdwon to format messages
     return (
         <div className="messages">
             {messages.map((msg) => (

@@ -76,7 +76,7 @@
   /* Background layers */
   --color-bg: #ffffff;
   --color-surface: var(--color-secondary);
-  --color-surface-hover: color-mix(in srgb, var(--color-primary), transparent 95%);
+  --color-surface-hover: color-mix(in srgb, var(--color-primary), transparent 90%);
   --color-surface-alt: transparent;
   
   --color-accent: #007BFF;
@@ -127,6 +127,8 @@ textarea {
   resize: none;
   border: transparent;
   outline: none;
+  font-family: var(--font-ui);
+  font-size: 1rem;
   /* outline: var(--color-primary); */
 }
 
