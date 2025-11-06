@@ -6,7 +6,7 @@
   flex: 1;
   background: var(--color-bg);
   color: var(--color-text);
-  padding: 20px;
+  padding: 10px;
   max-width: var(--max-chatbody-width);
   width: 100%;
   margin: 0 auto;
@@ -14,25 +14,6 @@
   overflow: hidden;
   font-family: var(--font-ui);
   font-size: var(--fs-base);
-  line-height: var(--lh-body);  
-}
-
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 0px;
-  padding-right: 10px;
-}
-
-.messages::-webkit-scrollbar {
-  width: 6px;
-}
-
-.messages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.messages::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.06);
-  border-radius: 3px;
+  line-height: var(--lh-body); 
+  box-sizing: border-box;
 }

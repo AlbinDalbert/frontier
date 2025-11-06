@@ -1,3 +1,40 @@
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0px;
+  /* padding-right: 10px; */
+  /* -webkit-mask-image: linear-gradient(to bottom, transparent 0, black var(--fade-px), black 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, black var(--fade-px), black 100%); */
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--fade-px),
+    black calc(100% - var(--fade-bottom-px)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--fade-px),
+    black calc(100% - var(--fade-bottom-px)),
+    transparent 100%
+  );
+}
+
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+}
+
 .message {
   padding: 10px;
   font-weight: 500;
@@ -42,6 +79,14 @@ pre {
   background: var(--color-surface-alt);
   align-self: flex-start;
   border-radius: var(--bubble-radius) var(--bubble-radius) var(--bubble-radius) var(--bubble-radius-min);
+}
+
+.messages-spacer {
+  height: var(--fade-px);
+}
+
+.messages-bottom-spacer {
+  height: var(--fade-bottom-px);
 }
 
 .loading-spinner {

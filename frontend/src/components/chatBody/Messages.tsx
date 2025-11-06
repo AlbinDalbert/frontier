@@ -23,6 +23,7 @@ const Messages: React.FC<MessagesProps> = ({
     // add react-markdwon to format messages
     return (
         <div className="messages">
+            <div className="messages-spacer" />
             {messages.map((msg) => (
                 <div key={msg.id} className={`message ${msg.sender}`}>
                     <pre>{msg.text}</pre>
@@ -37,6 +38,7 @@ const Messages: React.FC<MessagesProps> = ({
 
             {isLoading && <div className="message loading-spinner" />}
             <div ref={endRef} />
+            <div className="messages-bottom-spacer" />
         </div>
     );
 };

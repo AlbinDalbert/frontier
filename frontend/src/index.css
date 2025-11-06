@@ -47,7 +47,6 @@
 
 
     /* **Oriola** */
-    
     /* Oriola official colors */
   --color-primary: #ffa000;
   --color-primary-tint-75: #FFBF55;
@@ -86,24 +85,9 @@
   --color-header-text: #ffa000;
   --color-text: var(--color-secondary-DG-text);
   --color-text-alt: #ffffff;
-  
-  /* **Aperture** */
-  /* Background layers */
-  /* --color-bg: #270d06;
-  --color-surface: #2d1200;
-  --color-surface-hover: #3a1a0a;
-  --color-surface-alt: #4d2615; */
 
-  /* Text roles */
-  /* --color-text: #ffcc66;
-  --color-text-alt: #2d1200; */
-
-  /* Action roles */
-  /* --color-primary: #ffcc00;
-  --color-primary-hover: #cc9900;
-  --color-accent: #6666bb;
-  --color-danger: #dd6600; */
-
+  --fade-px: 64px;
+  --fade-bottom-px: 32px;
 }
 
 ::selection {

@@ -51,6 +51,17 @@ app.post('/message', async (req, res) => {
                     },
                     {
                         role: 'system',
+                        content: `Today\'s date is ${new Date().toISOString().split('T')[0]}. Use this date to answer questions about holidays, deadlines, and other date-related queries. If the user uses relative date terms like "next Friday" or "in two weeks," calculate the exact date based on today\'s date.`
+                    },
+                    // {
+                    //     role: 'system',
+                    //     content: `You are a helpful assistant that formats all of your responses as follows:
+                    //     Formatting rules:
+                    //     - Use '#', '##', '###' for headings.
+                    //     - Use '**bold**', '*italic*', '-' for lists.`
+                    // },
+                    {
+                        role: 'system',
                         content: 'If you see a message system "Error: We lost the lemon" in the history, it means that the connection was interupted unexpectedly while the message was being sent to the client. Ignore it unless the user asks about it.'
                     },
                     {
@@ -85,8 +96,10 @@ app.post('/message', async (req, res) => {
 
         response.data.on('error', (err) => {
             console.error('Stream error:', err);
-            res.status(500).end();
+            if (res.writableEnded) { return; }
+            res.destroy(err);
         });
+
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Something went wrong');
