@@ -5,7 +5,8 @@
   padding: 10px;
   border-radius: 2ch;
   border-color: transparent;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 1px 4px rgba(0,0,0, 0.3); */
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--color-secondary) 30%, transparent);
 }
 
 .input-box > .input-field {
@@ -34,7 +35,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
+}
 
+.input-box button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-primary);
 }
 
 .input-box button:hover {
@@ -54,9 +61,11 @@
   border-radius: 4px;
 }
 
-
-.input-box button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background-color: var(--color-primary);
+.icon {
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-secondary);
+  -webkit-mask: url('../../assets/Untitled.png') no-repeat center / contain;
+  mask: url('../../assets/Untitled.png') no-repeat center / contain;
+  display: inline-block;
 }

@@ -60,6 +60,13 @@ export function useAzureStream(): {
                                 break;
                             }
 
+                            if (data === "[ERROR]") {
+                                const streamError = new Error(
+                                    "Server error occurred"
+                                );
+                                throw streamError;
+                            }
+
                             try {
                                 const parsed = JSON.parse(data);
 

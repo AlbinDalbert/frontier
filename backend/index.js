@@ -33,6 +33,41 @@ app.post('/message', async (req, res) => {
         const search_context = await get_search_context(userMessage);
         const url = `${endpoint}/openai/responses?api-version=2025-04-01-preview`;
 
+        const messages = [
+            {
+                role: 'system',
+                content: 'You are a helpful assistant. If the answer to the users question has a short, one-line answer, provide that in addition to a more detailed explanation. If the question isn\'t quick and easy to answer, provide don\'t provide a quick answer.'
+            },
+            {
+                role: 'system',
+                content: `Today\'s date is ${new Date().toISOString().split('T')[0]}. Use this date to answer questions about holidays, deadlines, and other date-related queries. If the user uses relative date terms like "next Friday" or "in two weeks," calculate the exact date based on today\'s date.`
+            },
+            // {
+            //     role: 'system',
+            //     content: `You are a helpful assistant that formats all of your responses as follows:
+            //     Formatting rules:
+            //     - Use '#', '##', '###' for headings.
+            //     - Use '**bold**', '*italic*', '-' for lists.`
+            // },
+            {
+                role: 'system',
+                content: 'If you see a message system "Error: We lost the lemon" in the history, it means that the connection was interupted unexpectedly while the message was being sent to the client. Ignore it unless the user asks about it.'
+            },
+            {
+                role: 'system',
+                content: ' When calculating available holiday days, you must sum the entitlement from ALL completed holiday credit years since the start of employment. Do not confuse the total available days with the rules for scheduling (e.g., the 24-day summer holiday portion). The final answer must be the total accumulated sum.'
+            },
+            {
+                role: 'system',
+                content: `Use the following internal context to answer the users question. If you get an error and you suspect it is important info to answer the users question, tell them you encountered a problem. context: \n${search_context}`
+            },
+            ...contextMessages,
+            {
+                role: 'user',
+                content: userMessage
+            }
+        ]
+
         const response = await axios({
             url: url,
             method: 'POST',
@@ -44,40 +79,7 @@ app.post('/message', async (req, res) => {
             data: {
                 model: deployment,
                 stream: true,
-                input: [
-                    {
-                        role: 'system',
-                        content: 'You are a helpful assistant. If the answer to the users question has a short, one-line answer, provide that in addition to a more detailed explanation. If the question isn\'t quick and easy to answer, provide don\'t provide a quick answer.'
-                    },
-                    {
-                        role: 'system',
-                        content: `Today\'s date is ${new Date().toISOString().split('T')[0]}. Use this date to answer questions about holidays, deadlines, and other date-related queries. If the user uses relative date terms like "next Friday" or "in two weeks," calculate the exact date based on today\'s date.`
-                    },
-                    // {
-                    //     role: 'system',
-                    //     content: `You are a helpful assistant that formats all of your responses as follows:
-                    //     Formatting rules:
-                    //     - Use '#', '##', '###' for headings.
-                    //     - Use '**bold**', '*italic*', '-' for lists.`
-                    // },
-                    {
-                        role: 'system',
-                        content: 'If you see a message system "Error: We lost the lemon" in the history, it means that the connection was interupted unexpectedly while the message was being sent to the client. Ignore it unless the user asks about it.'
-                    },
-                    {
-                        role: 'system',
-                        content: ' When calculating available holiday days, you must sum the entitlement from ALL completed holiday credit years since the start of employment. Do not confuse the total available days with the rules for scheduling (e.g., the 24-day summer holiday portion). The final answer must be the total accumulated sum.'
-                    },
-                    {
-                        role: 'system',
-                        content: `Use the following internal context to answer the users question. If you get an error and you suspect it is important info to answer the users question, tell them you encountered a problem. context: \n${search_context}`
-                    },
-                    ...contextMessages,
-                    {
-                        role: 'user',
-                        content: userMessage
-                    }
-                ]
+                input: messages
             },
         });
         
@@ -86,23 +88,45 @@ app.post('/message', async (req, res) => {
         res.setHeader('Connection', 'keep-alive');
 
         response.data.on('data', (chunk) => {
-            res.write(chunk);
+            if (!res.writableEnded) {
+                res.write(chunk);
+            }
         });
         
         response.data.on('end', () => {
-            res.write('data: [DONE]\n\n');
-            res.end();
+            if (!res.writableEnded) {
+                res.write('data: [DONE]\n\n');
+                res.end();
+            }
         });
 
         response.data.on('error', (err) => {
             console.error('Stream error:', err);
             if (res.writableEnded) { return; }
-            res.destroy(err);
+            
+            try {
+                res.write(`data: ${JSON.stringify({error: 'Stream error occurred', message: err.message})}\n\n`);
+                res.write('data: [ERROR]\n\n');
+                res.end();
+            } catch (writeError) {
+                console.error('Error sending stream error response:', writeError);
+                res.destroy(writeError);
+            }
         });
 
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).send('Something went wrong');
+
+        if (!res.writableEnded) {
+            try {
+                res.write(`data: ${JSON.stringify({error: 'Server error occurred', message: error.message})}\n\n`);
+                res.write('data: [ERROR]\n\n');
+                res.end();
+            } catch (writeError) {
+                console.error('Error sending error response:', writeError);
+                res.destroy(writeError);
+            }
+        }
     }
 });
 

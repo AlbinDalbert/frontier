@@ -55,11 +55,7 @@ const InputBox: React.FC<InputBoxProps> = ({ onSend, isLoading }) => {
             />
             <button onClick={handleSend} disabled={isLoading}>
                 {/* Fix getting a better image for the send icon */}
-                <img
-                    src={sendIcon}
-                    alt="Send"
-                    style={{ width: "20px", height: "20px" }}
-                />
+                <span className="icon"></span>
             </button>
         </div>
     );
